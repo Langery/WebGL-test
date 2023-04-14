@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>基础模型</title>
-	<style>
+	<style type="css">
 		body {
       margin: 0;
 			overflow: hidden;
@@ -12,10 +12,21 @@
 			margin: 0;
 			padding: 0;
 		}
+		#info {
+			position: absolute;
+			top: 10px;
+			width: 100%;
+			text-align: center;
+			z-index: 100;
+			display:block;
+		}
 	</style>
 	<script type="text/javascript" src="../js/three.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.3/three.min.js"></script>
 </head>
 <body onload="init()">
+	<!-- 创建文字 -->
+	<div id="info">Description</div>
 	<!-- 创建canvas -->
 	<canvas id="canvasId"></canvas>
 	<script>
@@ -62,6 +73,18 @@
 			* vertexColors: 定义顶点的颜色，在canvasRender中不起作用
 			* fog: 决定单个材质是否受全局雾化的影响
 			*/
+			const materialFirst = new THREE.LineBasicMaterial({ color: 0x0000ff });
+			const points = [];
+			points.push( new THREE.Vector3(-10, 0, 0) );
+			points.push( new THREE.Vector3(0, 10, 0) );
+			points.push( new THREE.Vector3(10, 0, 0) );
+
+			const geometryFirst = new THREE.BufferGeometry().setFromPoints( points );
+
+			const lineFirst = new THREE.Line(geometryFirst, materialFirst);
+
+			scene.add(lineFirst)
+
 			var cubeMaterial = new THREE.MeshBasicMaterial({
 				color: 0xff0000,
 				wireframe: true
