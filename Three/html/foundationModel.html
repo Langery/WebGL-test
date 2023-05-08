@@ -107,9 +107,20 @@
        */
 			// renderer.render(scene, camera)
       function animate() {
-      	requestAnimationFrame(animate)
-      	renderer.render(scene, camera)
+      	requestAnimationFrame(animate);
+
+      	renderer.render(scene, camera);
+
+				// 运行轨迹动画
+				// rotationFun();
       }
+
+			// 旋转轨迹动画
+			function rotationFun() {
+				// 旋转速度频率
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+			}
       animate();
 		}
 	</script>
