@@ -31,16 +31,17 @@
 	<!-- 创建canvas -->
 	<canvas id="canvasId"></canvas>
 	<script>
+		let scene, camera, renderer, cube;
+
+		// 设置浏览器窗口宽高
+		var [width, height] = [window.innerWidth, window.innerHeight];
 
 		init();
+		animate();
 
 		function init() {
-			// 设置浏览器窗口宽高
-			var width = window.innerWidth
-			var height = window.innerHeight
-
 			// 场景 Scene
-			var scene = new THREE.Scene()
+			scene = new THREE.Scene()
 			// 相机 Camera
 			// 具有透视效果
 			/*
@@ -51,7 +52,7 @@
 			* near 相机视物体的近平面  默认为0.1
 			* far 相机视物体的远平面  默认为2000
 			*/
-			var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 800)
+			camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 800);
 
 			cameraFun(camera, 10, 20, 30);
 
@@ -63,13 +64,12 @@
 			}
 
 			// 渲染器 Renderer
-			var renderer = new THREE.WebGLRenderer()
-			// 设置背景颜色和尺寸
-			// renderer.setClearColor(0xffffff)
-			// renderer.setClearColor(0x000000)
+			renderer = new THREE.WebGLRenderer()
+			
 			rendererFun(renderer, 0xffffff, width, height)
 
 			function rendererFun(renderer, color, width, height){
+				// 设置背景颜色和尺寸
 				renderer.setClearColor(color);
 				renderer.setSize(width,height);
 			}
@@ -103,7 +103,7 @@
 				wireframe: true
 			})
 			// 创建立方体网格(mesh)
-			var cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+			cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 			cube.position.x = 0
 			cube.position.y = 2
 			cube.position.z = 0
@@ -120,22 +120,20 @@
        * requestAnimationFrame 当用户切换到其他标签的时候,它会暂停,不会浪费处理器资源以及耗损电池的使用寿命
        */
 			// renderer.render(scene, camera)
-      function animate() {
-      	requestAnimationFrame(animate);
+		}
+		function animate() {
+			requestAnimationFrame(animate);
 
-      	renderer.render(scene, camera);
+			renderer.render(scene, camera);
 
-				// 运行轨迹动画
-				// rotationFun();
-      }
-
-			// 旋转轨迹动画
-			function rotationFun() {
-				// 旋转速度频率
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.01;
-			}
-      animate();
+			// 运行轨迹动画
+			// rotationFun();
+		}
+		// 旋转轨迹动画
+		function rotationFun() {
+			// 旋转速度频率
+			cube.rotation.x += 0.01;
+			cube.rotation.y += 0.01;
 		}
 	</script>
 </body>
