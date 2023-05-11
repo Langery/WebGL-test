@@ -23,15 +23,25 @@
 	</style>
 	<script type="text/javascript" src="../js/three.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.3/three.min.js"></script>
-	<script type="text/javascript" src="../js/controls/OrbitControls.js"></script>
+	<!-- <script type="importmap">
+		{
+			"imports": {
+				"three": "https://unpkg.com/three@138.0/build/three.module.js"
+				"three/addons": "../js/three.js/examples/jsm"
+			}
+		}
+	</script> -->
 </head>
 <body>
 	<!-- 创建文字 -->
 	<div id="info">Description</div>
 	<!-- 创建canvas -->
 	<canvas id="canvasId"></canvas>
-	<script>
-		let scene, camera, renderer, cube;
+	<script type="module">
+		// import * as THREE from 'three'
+		// import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
+		let scene, camera, renderer, cube, cubeGeometry, cubeMaterial, materialFirst, lineFirst, geometryFirst;
 
 		// 设置浏览器窗口宽高
 		var [width, height] = [window.innerWidth, window.innerHeight];
@@ -41,7 +51,8 @@
 
 		function init() {
 			// 场景 Scene
-			scene = new THREE.Scene()
+			scene = new THREE.Scene();
+
 			// 相机 Camera
 			// 具有透视效果
 			/*
@@ -54,28 +65,11 @@
 			*/
 			camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 800);
 
-			cameraFun(camera, 10, 20, 30);
-
-			function cameraFun(camera, x, y, z) {
-				camera.position.x = x
-				camera.position.y = y
-				camera.position.z = z
-				camera.lookAt(scene.position)
-			}
-
 			// 渲染器 Renderer
-			renderer = new THREE.WebGLRenderer()
-			
-			rendererFun(renderer, 0xffffff, width, height)
-
-			function rendererFun(renderer, color, width, height){
-				// 设置背景颜色和尺寸
-				renderer.setClearColor(color);
-				renderer.setSize(width,height);
-			}
+			renderer = new THREE.WebGLRenderer();
 
 			// 几何体
-			var cubeGeometry = new THREE.BoxGeometry(8,8,8)
+			cubeGeometry = new THREE.BoxGeometry(8,8,8)
 			//  创建材质
 			/*
 			* 基础网格材质
@@ -86,19 +80,17 @@
 			* vertexColors: 定义顶点的颜色，在canvasRender中不起作用
 			* fog: 决定单个材质是否受全局雾化的影响
 			*/
-			const materialFirst = new THREE.LineBasicMaterial({ color: 0x0000ff });
-			const points = [];
+			materialFirst = new THREE.LineBasicMaterial({ color: 0x0000ff });
+			let points = [];
 			points.push( new THREE.Vector3(-10, 0, 0) );
 			points.push( new THREE.Vector3(0, 10, 0) );
 			points.push( new THREE.Vector3(10, 0, 0) );
 
-			const geometryFirst = new THREE.BufferGeometry().setFromPoints( points );
+			geometryFirst = new THREE.BufferGeometry().setFromPoints( points );
 
-			const lineFirst = new THREE.Line(geometryFirst, materialFirst);
+			lineFirst = new THREE.Line(geometryFirst, materialFirst);
 
-			scene.add(lineFirst)
-
-			var cubeMaterial = new THREE.MeshBasicMaterial({
+			cubeMaterial = new THREE.MeshBasicMaterial({
 				color: 0xff0000,
 				wireframe: true
 			})
@@ -108,20 +100,39 @@
 			cube.position.y = 2
 			cube.position.z = 0
 
-			// 添加物体到场景中
-			scene.add(cube)
-			// 将渲染器的输出（canvas）插入到body中
-			document.body.appendChild(renderer.domElement)
+			// controls = new OrbitControls(camera, renderer.domElement);
 
+			cameraFun(camera, 10, 20, 30);
+
+			function cameraFun(camera, x, y, z) {
+				camera.position.x = x
+				camera.position.y = y
+				camera.position.z = z
+				camera.lookAt(scene.position)
+			}
+			
+			rendererFun(renderer, 0xffffff, width, height);
+
+			function rendererFun(renderer, color, width, height){
+				// 设置背景颜色和尺寸
+				renderer.setClearColor(color);
+				renderer.setSize(width,height);
+			}
+
+			scene.add(lineFirst);
+
+			// 添加物体到场景中
+			scene.add(cube);
+			// 将渲染器的输出（canvas）插入到body中
+			document.body.appendChild(renderer.domElement);
+		}
+		function animate() {
 			// 渲染场景
 			/**
        * [animate description]
        * Langery 2018-12-03
        * requestAnimationFrame 当用户切换到其他标签的时候,它会暂停,不会浪费处理器资源以及耗损电池的使用寿命
        */
-			// renderer.render(scene, camera)
-		}
-		function animate() {
 			requestAnimationFrame(animate);
 
 			renderer.render(scene, camera);
