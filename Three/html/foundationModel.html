@@ -22,25 +22,15 @@
 		}
 	</style>
 	<script type="text/javascript" src="../js/three.js"></script>
+	<script type="module" src="../js/controls/OrbitControls.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.3/three.min.js"></script>
-	<!-- <script type="importmap">
-		{
-			"imports": {
-				"three": "https://unpkg.com/three@138.0/build/three.module.js"
-				"three/addons": "../js/three.js/examples/jsm"
-			}
-		}
-	</script> -->
 </head>
 <body>
 	<!-- 创建文字 -->
 	<div id="info">Description</div>
 	<!-- 创建canvas -->
 	<canvas id="canvasId"></canvas>
-	<script type="module">
-		// import * as THREE from 'three'
-		// import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-
+	<script>
 		let scene, camera, renderer, cube, cubeGeometry, cubeMaterial, materialFirst, lineFirst, geometryFirst;
 
 		// 设置浏览器窗口宽高
@@ -67,6 +57,10 @@
 
 			// 渲染器 Renderer
 			renderer = new THREE.WebGLRenderer();
+
+			// 坐标系
+			let axes = new THREE.AxesHelper(12)
+			scene.add(axes)
 
 			// 几何体
 			cubeGeometry = new THREE.BoxGeometry(8,8,8)
