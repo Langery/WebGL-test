@@ -21,20 +21,24 @@
 			display:block;
 		}
 	</style>
-	<script type="text/javascript" src="../js/three.js"></script>
-	<script type="module" src="../js/controls/OrbitControls.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.3/three.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js" integrity="sha512-R7eFJsc3NlvsTn5hdD/Xvi6FwpFGAoGOa2nBNU89DXAZzXgQQrfhgHVpm5Kh7H9EuCU3Ymexph9z4IiHrq977g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.module.min.js" integrity="sha512-Izl8ECn6PrRsKe8e2P/tRO3E+uTZ6iVa+1Y/GuqUAOzgx7p9/jaxCU/kAFN2644Wl+IQg/nb814onT0vNJ98vA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 	<!-- 创建文字 -->
 	<div id="info">Description</div>
 	<!-- 创建canvas -->
-	<canvas id="canvasId"></canvas>
+	<!-- <canvas id="canvasId"></canvas> -->
 	<script>
 		let scene, camera, renderer, cube, cubeGeometry, cubeMaterial, materialFirst, lineFirst, geometryFirst;
 
 		// 设置浏览器窗口宽高
 		var [width, height] = [window.innerWidth, window.innerHeight];
+
+		// 参数
+		var [LineColor] = [0x1ba784];
+		var [positionX, positionY, positionZ] = [0, 2, 0];
+		var [cameraX, cameraY, cameraZ] = [10, 20, 30];
 
 		init();
 		animate();
@@ -85,18 +89,26 @@
 			lineFirst = new THREE.Line(geometryFirst, materialFirst);
 
 			cubeMaterial = new THREE.MeshBasicMaterial({
-				color: 0xff0000,
+				color: LineColor,
 				wireframe: true
 			})
 			// 创建立方体网格(mesh)
 			cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-			cube.position.x = 0
-			cube.position.y = 2
-			cube.position.z = 0
+			cube.position.x = positionX
+			cube.position.y = positionY
+			cube.position.z = positionZ
 
-			// controls = new OrbitControls(camera, renderer.domElement);
+			// 更新场景
+			const object = new THREE.Object3D();
 
-			cameraFun(camera, 10, 20, 30);
+			object.matrixAutoUpdate = false;
+			object.updateMatrix();
+
+			// 增添背景色
+			// scene.background = new Color('skyblue');
+			
+
+			cameraFun(camera, cameraX, cameraY, cameraZ);
 
 			function cameraFun(camera, x, y, z) {
 				camera.position.x = x
@@ -117,14 +129,16 @@
 
 			// 添加物体到场景中
 			scene.add(cube);
+
+			scene.add(object);
 			// 将渲染器的输出（canvas）插入到body中
 			document.body.appendChild(renderer.domElement);
+
 		}
 		function animate() {
 			// 渲染场景
 			/**
-       * [animate description]
-       * Langery 2018-12-03
+       * [animate description] Langery 2018-12-03
        * requestAnimationFrame 当用户切换到其他标签的时候,它会暂停,不会浪费处理器资源以及耗损电池的使用寿命
        */
 			requestAnimationFrame(animate);
