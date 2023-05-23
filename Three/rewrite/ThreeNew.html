@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDN of ThreeJS</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js" integrity="sha512-R7eFJsc3NlvsTn5hdD/Xvi6FwpFGAoGOa2nBNU89DXAZzXgQQrfhgHVpm5Kh7H9EuCU3Ymexph9z4IiHrq977g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.module.min.js" integrity="sha512-Izl8ECn6PrRsKe8e2P/tRO3E+uTZ6iVa+1Y/GuqUAOzgx7p9/jaxCU/kAFN2644Wl+IQg/nb814onT0vNJ98vA==" crossorigin="anonymous" referrerpolicy="no-referrer" type="module"></script>
+  <style>
+    *{
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div></div>
+  <script>
+    let scene, camera, renderer, cubeGeometry, materialFirst, lineFirst, geometryFirst;
+
+    var [width, height] = [window.innerWidth, window.innerHeight];
+
+    var [LineColor] = [0x1ba784];
+    var [positionX, positionY, positionZ] = [0, 2, 0];
+    var [cameraX, cameraY, cameraZ] = [10, 20, 30];
+
+    init();
+    animate();
+
+    function init() {
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 800);
+
+      renderer = new THREE.WebGLRenderer();
+
+      let axes = new THREE.AxesHelper(12)
+      scene.add(axes)
+
+      // 几何体
+      cubeGeometry = new THREE.BoxGeometry(8,8,8)
+
+      materialFirst = new THREE.LineBasicMaterial({ color: 0x0000ff });
+      let points = [];
+      points.push( new THREE.Vector3(-10, 0, 0) );
+      points.push( new THREE.Vector3(0, 10, 0) );
+      points.push( new THREE.Vector3(10, 0, 0) );
+
+      geometryFirst = new THREE.BufferGeometry().setFromPoints( points );
+
+      lineFirst = new THREE.Line(geometryFirst, materialFirst);
+
+      // 更新场景
+      const object = new THREE.Object3D();
+
+      object.matrixAutoUpdate = false;
+      object.updateMatrix();
+
+
+      cameraFun(camera, cameraX, cameraY, cameraZ);
+
+      function cameraFun(camera, x, y, z) {
+        camera.position.x = x
+        camera.position.y = y
+        camera.position.z = z
+        camera.lookAt(scene.position)
+      }
+      
+      rendererFun(renderer, 'skyblue', width, height);
+
+      function rendererFun(renderer, color, width, height){
+        // 设置背景颜色和尺寸
+        renderer.setClearColor(color);
+        renderer.setSize(width,height);
+      }
+
+      scene.add(lineFirst);
+
+      scene.add(object);
+
+      document.body.appendChild(renderer.domElement);
+
+    }
+    function animate() {
+      // 渲染场景
+      requestAnimationFrame(animate);
+
+      renderer.render(scene, camera);
+
+      // 运行轨迹动画
+      // rotationFun();
+    }
+
+    function rotationFun(obj, xTime, yTime) {
+
+      obj.rotation.x += xTime;
+      obj.rotation.y += yTime;
+    }
+  </script>
+</body>
+</html>

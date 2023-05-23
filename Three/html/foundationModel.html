@@ -23,6 +23,9 @@
 	</style>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js" integrity="sha512-R7eFJsc3NlvsTn5hdD/Xvi6FwpFGAoGOa2nBNU89DXAZzXgQQrfhgHVpm5Kh7H9EuCU3Ymexph9z4IiHrq977g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.module.min.js" integrity="sha512-Izl8ECn6PrRsKe8e2P/tRO3E+uTZ6iVa+1Y/GuqUAOzgx7p9/jaxCU/kAFN2644Wl+IQg/nb814onT0vNJ98vA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<!-- <script src="../js/three.js"></script>
+	<script src="../js/ThreeBSP.js"></script>
+	<script src="../js/controls/OrbitControls.js"></script> -->
 </head>
 <body>
 	<!-- 创建文字 -->
@@ -107,6 +110,10 @@
 			// 增添背景色
 			// scene.background = new Color('skyblue');
 			
+			// var controlsNew = new THREE.OrbitControls(camera);
+			// controlsNew.addEventListener( 'change', render );
+			// controlsNew.target.set( 0, 1.2, 2 );
+			// controlsNew.update();
 
 			cameraFun(camera, cameraX, cameraY, cameraZ);
 
