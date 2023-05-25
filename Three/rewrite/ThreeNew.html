@@ -10,6 +10,7 @@
   <style>
     *{
       margin: 0;
+      padding: 0;
     }
   </style>
 </head>
@@ -37,7 +38,6 @@
       let axes = new THREE.AxesHelper(12)
       scene.add(axes)
 
-      // 几何体
       cubeGeometry = new THREE.BoxGeometry(8,8,8)
 
       materialFirst = new THREE.LineBasicMaterial({ color: 0x0000ff });
@@ -50,12 +50,12 @@
 
       lineFirst = new THREE.Line(geometryFirst, materialFirst);
 
-      // 更新场景
       const object = new THREE.Object3D();
 
       object.matrixAutoUpdate = false;
       object.updateMatrix();
 
+      // drawGrid();
 
       cameraFun(camera, cameraX, cameraY, cameraZ);
 
@@ -81,6 +81,18 @@
       document.body.appendChild(renderer.domElement);
 
     }
+    function drawGrid(){
+      let cubDraw = new THREE.BoxGeometry(1, 200, 20);
+      let cubMaterial = new THREE.MeshBasicMaterial({ color: 'orange' })
+
+      let cubeWall = new THREE.Mesh(cubDraw, cubMaterial);            // 设置墙面位置  
+      cubeWall.position.x = 0;
+      cubeWall.position.y = 10;
+      cubeWall.position.z = 10;
+
+      scene.add(cubeWall);
+    }
+
     function animate() {
       // 渲染场景
       requestAnimationFrame(animate);
