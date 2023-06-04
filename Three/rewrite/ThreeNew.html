@@ -5,8 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CDN of ThreeJS</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js" integrity="sha512-R7eFJsc3NlvsTn5hdD/Xvi6FwpFGAoGOa2nBNU89DXAZzXgQQrfhgHVpm5Kh7H9EuCU3Ymexph9z4IiHrq977g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.module.min.js" integrity="sha512-Izl8ECn6PrRsKe8e2P/tRO3E+uTZ6iVa+1Y/GuqUAOzgx7p9/jaxCU/kAFN2644Wl+IQg/nb814onT0vNJ98vA==" crossorigin="anonymous" referrerpolicy="no-referrer" type="module"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.138.3/three.min.js" integrity="sha512-AULygUpzXeEwzx9VCz35G2O8dW4DZzBlj7+kiVTgWTAKAEbxAMKhr53ze2w1W1g48H5mkbUDj8aQ0F+2LOxblQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.138.3/three.module.js" integrity="sha512-JblzfeZXjY95iEU2DqYdUv1Y5smR/CxituOOplSquRBBsU2LawO2BDC5R/mqlRD9pbecUUpbuRToCCGxqPv4xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/three@0.138.2/examples/jsm/controls/OrbitControls.js"></script>
   <style>
     *{
       margin: 0;
@@ -17,7 +18,7 @@
 <body>
   <div></div>
   <script>
-    let scene, camera, renderer, cubeGeometry, materialFirst, lineFirst, geometryFirst;
+    let scene, camera, renderer, cubeGeometry, materialFirst, lineFirst, geometryFirst, grid;
 
     var [width, height] = [window.innerWidth, window.innerHeight];
 
@@ -31,15 +32,51 @@
     function init() {
       scene = new THREE.Scene();
 
-      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 800);
+      camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 800);
 
       renderer = new THREE.WebGLRenderer();
 
-      let axes = new THREE.AxesHelper(12)
-      scene.add(axes)
+      // let control = new THREE.OrbitControls(camera) 
 
       cubeGeometry = new THREE.BoxGeometry(8,8,8)
 
+      const object = new THREE.Object3D();
+
+      object.matrixAutoUpdate = false;
+      object.updateMatrix();
+
+      drawGrid();
+
+      cameraFun(camera, cameraX, cameraY, cameraZ);
+
+      grid = new THREE.GridHelper(50, 20, 0xC0C0C0, 0x696969);
+
+
+      function cameraFun(camera, x, y, z) {
+        camera.position.x = x
+        camera.position.y = y
+        camera.position.z = z
+        camera.lookAt(scene.position)
+      }
+      
+      rendererFun(renderer, 'white', width, height);
+
+      function rendererFun(renderer, color, width, height){
+        // 设置背景颜色和尺寸
+        renderer.setClearColor(color);
+        renderer.setSize(width,height);
+      }
+
+      // lineDraw();
+
+      scene.add(object);
+
+      scene.add(grid);
+
+      document.body.appendChild(renderer.domElement);
+
+    }
+    function lineDraw(){
       materialFirst = new THREE.LineBasicMaterial({ color: 0x0000ff });
       let points = [];
       points.push( new THREE.Vector3(-10, 0, 0) );
@@ -49,46 +86,41 @@
       geometryFirst = new THREE.BufferGeometry().setFromPoints( points );
 
       lineFirst = new THREE.Line(geometryFirst, materialFirst);
-
-      const object = new THREE.Object3D();
-
-      object.matrixAutoUpdate = false;
-      object.updateMatrix();
-
-      // drawGrid();
-
-      cameraFun(camera, cameraX, cameraY, cameraZ);
-
-      function cameraFun(camera, x, y, z) {
-        camera.position.x = x
-        camera.position.y = y
-        camera.position.z = z
-        camera.lookAt(scene.position)
-      }
       
-      rendererFun(renderer, 'skyblue', width, height);
-
-      function rendererFun(renderer, color, width, height){
-        // 设置背景颜色和尺寸
-        renderer.setClearColor(color);
-        renderer.setSize(width,height);
-      }
-
       scene.add(lineFirst);
-
-      scene.add(object);
-
-      document.body.appendChild(renderer.domElement);
-
     }
     function drawGrid(){
-      let cubDraw = new THREE.BoxGeometry(1, 200, 20);
-      let cubMaterial = new THREE.MeshBasicMaterial({ color: 'orange' })
+      let cubDraw = new THREE.BoxGeometry(5, 5, 5);
+      let cubMaterial = new THREE.MeshBasicMaterial({ color: '#C28252' })
 
       let cubeWall = new THREE.Mesh(cubDraw, cubMaterial);            // 设置墙面位置  
       cubeWall.position.x = 0;
-      cubeWall.position.y = 10;
-      cubeWall.position.z = 10;
+      cubeWall.position.y = 0;
+      cubeWall.position.z = 0;
+
+
+      // 创建线条
+      let cubematerial = new THREE.LineBasicMaterial({ color: 0x0000ff });
+			let cubepoints = [];
+			cubepoints.push( new THREE.Vector3(5, 5, 5) );
+			cubepoints.push( new THREE.Vector3(5, 5, 5) );
+			cubepoints.push( new THREE.Vector3(5, 5, 5) );
+
+			cubegeometry = new THREE.BufferGeometry().setFromPoints( cubepoints );
+
+			lineFirst = new THREE.Line(cubegeometry, cubematerial);
+
+			cubeMaterial = new THREE.MeshBasicMaterial({
+				color: 0x000000,
+				wireframe: true
+			})
+			// 创建立方体网格(mesh)
+			cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+			cube.position.x = 0
+			cube.position.y = 0
+			cube.position.z = 0
+
+      cubeWall.add(cube)
 
       scene.add(cubeWall);
     }
