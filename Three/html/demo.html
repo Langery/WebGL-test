@@ -37,13 +37,22 @@
 		// 设置初始颜色
 		var color = 0xffffff;
 
-		init(window.innerWidth, window.innerHeight, 600);
+		let [w_width, w_height] = [window.innerWidth, window.innerHeight];
+
+		init(w_width, w_height, 600);
 		animate();
 
 		function init(lenght, width, height) {
 				container = document.getElementById('div2');
 
-				camera = new THREE.OrthographicCamera(-lenght / 2, lenght / 2, width/2, -width/2, -500, 1000);
+				camera = new THREE.OrthographicCamera(
+					-lenght / 2,
+					lenght / 2,
+					width / 2,
+					-width / 2,
+					-500,
+					1000
+				);
 
 				// 设置初始位置x
 				camera.position.x = 100;
@@ -122,14 +131,14 @@
 
 		}
 
-						//如果是斜度，请转换z为斜度后的值
+		//如果是斜度，请转换z为斜度后的值
 		function drawGrid(x, xlen, xstep, y, ylen, ystep, z, zlen, zstep) { //淡绿
 
 				// 墙面3  
-				var cubeGeometry = new THREE.BoxGeometry(1, 200, 20); // 墙体厚度
+				var cubeGeometry = new THREE.BoxGeometry(1, 200, 20); // 墙体厚度 高度 宽度
 				var cubeMaterial = new THREE.MeshBasicMaterial({ color: color });	
 
-				var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);            // 设置墙面位置  
+				var cube = new THREE.Mesh(cubeGeometry, cubeMaterial); // 设置墙面位置  
 				cube.position.x = 0;
 				cube.position.y = 100;
 				cube.position.z = 20;
